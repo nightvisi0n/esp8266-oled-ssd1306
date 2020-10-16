@@ -42,8 +42,8 @@
 
 class SSD1306I2C : public OLEDDisplay {
 public:
-    SSD1306I2C(uint8_t _address, PinName _sda, PinName _scl, OLEDDISPLAY_GEOMETRY g = GEOMETRY_128_64) {
-      setGeometry(g);
+    SSD1306I2C(uint8_t _address, PinName _sda, PinName _scl, OLEDDISPLAY_GEOMETRY g = GEOMETRY_128_64, uint16_t width = 0, uint16_t height = 0) {
+      setGeometry(g, width, height);
 
       this->_address = _address << 1;  // convert from 7 to 8 bit for mbed.
       this->_sda = _sda;
@@ -104,7 +104,7 @@ public:
         for (y = minBoundY; y <= maxBoundY; y++) {
 			uint8_t *start = &buffer[(minBoundX + y * this->width())-1];
 			uint8_t save = *start;
-			
+
 			*start = 0x40; // control
 			_i2c->write(_address, (char *)start, (maxBoundX-minBoundX) + 1 + 1);
 			*start = save;
